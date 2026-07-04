@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.const import TodoItemStatusCode
 
@@ -44,6 +44,8 @@ class UpdateTodoItem(BaseModel):
 
 
 class ResponseTodoItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     todo_list_id: int
     title: str = Field(title="Todo Item Title", min_length=1, max_length=100)
@@ -70,6 +72,8 @@ class UpdateTodoList(BaseModel):
 
 class ResponseTodoList(BaseModel):
     """TODOリストのレスポンススキーマ."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     title: str = Field(title="Todo List Title", min_length=1, max_length=100)
