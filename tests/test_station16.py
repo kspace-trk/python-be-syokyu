@@ -24,7 +24,7 @@ def test_post_todo_list_422_title_validation_error() -> None:
     })
 
     # 実行結果の検証
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
 def test_put_todo_list_404_list_not_found() -> None:

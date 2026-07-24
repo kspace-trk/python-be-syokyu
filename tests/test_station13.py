@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.models import item_model, list_model
+from tests.conftest import refresh_session
 
 client = TestClient(app)
 
@@ -39,7 +40,7 @@ def test_delete_todo_item(db_session) -> None:
     # 実行結果の検証開始
     # ******************
     # 検証に支障を来たす不要なトランザクション破棄のためDBセッションのリセット
-    db_session.reset()
+    refresh_session(db_session)
 
     # ステータスコードの確認
     assert response.status_code == status.HTTP_200_OK

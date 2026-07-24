@@ -110,7 +110,7 @@ def test_post_todo_item_422_validation_error(db_session) -> None:
     # 実行結果の検証開始
     # ******************
     # ステータスコードの確認
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
 def test_put_todo_item_404_list_not_found(db_session) -> None:

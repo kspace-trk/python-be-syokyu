@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from app.const import TodoItemStatusCode
 from app.main import app
 from app.models import item_model, list_model
+from tests.conftest import refresh_session
 
 client = TestClient(app)
 
@@ -53,7 +54,7 @@ def test_put_todo_item(status_code: int, db_session) -> None:
     # 実行結果の検証開始
     # ******************
     # 検証に支障を来たす不要なトランザクション破棄のためDBセッションのリセット
-    db_session.reset()
+    refresh_session(db_session)
 
     # ステータスコードの確認
     assert response.status_code == status.HTTP_200_OK

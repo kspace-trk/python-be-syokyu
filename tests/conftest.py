@@ -1,5 +1,6 @@
 import pytest
 from sqlalchemy import inspect
+from sqlalchemy.orm import Session
 
 from app.database import SessionLocal, engine
 from app.models import item_model, list_model
@@ -16,7 +17,13 @@ def db_session():
         db.close()
 
 
-def _reset_records(db) -> None:
+def refresh_session(db: Session) -> None:
+    """API呼び出し後にテスト用DBセッションの状態をリセットする."""
+    db.rollback()
+    db.expire_all()
+
+
+def _reset_records(db: Session) -> None:
     """テーブルのレコードをリセット."""
     inspector = inspect(engine)
     table_names = inspector.get_table_names()

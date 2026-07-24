@@ -66,7 +66,8 @@ FastAPI は容易に WebAPI が開発でき、少ないコードの記述で実�
 
 #### 使用ライブラリ
 - フレームワーク
-    - [FastAPI](https://fastapi.tiangolo.com/ja/)(Gunicorn含む)
+    - [FastAPI](https://fastapi.tiangolo.com/ja/) 0.136.3（`fastapi-debug-toolbar` 互換のため 0.137 未満に固定）
+    - 開発サーバーは `fastapi dev` を使用
 - O/Rマッパー
     - [SQLAlchemy](https://www.sqlalchemy.org/)
 - マイグレーションツール

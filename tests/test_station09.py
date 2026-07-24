@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.models import list_model
+from tests.conftest import refresh_session
 
 client = TestClient(app)
 
@@ -20,7 +21,7 @@ def test_delete_todo_list(db_session) -> None:
     response = client.delete(f"/lists/{target_todo_list_id}")
 
     # 実行結果の検証
-    db_session.reset()
+    refresh_session(db_session)
 
     assert response.status_code == status.HTTP_200_OK
 

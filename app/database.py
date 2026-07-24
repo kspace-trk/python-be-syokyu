@@ -3,7 +3,7 @@
 from debug_toolbar.panels.sqlalchemy import SQLAlchemyPanel as BasePanel
 from fastapi import Request
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from app import const
 
@@ -14,15 +14,15 @@ engine = create_engine(
     echo=False,
 )
 
-SessionLocal = scoped_session(
-    sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=engine,
-    ),
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
 )
 
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
 
 
 class SQLAlchemyPanel(BasePanel):
