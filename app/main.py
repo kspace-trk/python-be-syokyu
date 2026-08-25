@@ -9,6 +9,8 @@ from app.const import TodoItemStatusCode
 from .models.item_model import ItemModel
 from .models.list_model import ListModel
 
+from app.dependencies import DbSession
+
 DEBUG = os.environ.get("DEBUG", "") == "true"
 
 app = FastAPI(
@@ -81,7 +83,17 @@ class ResponseTodoList(BaseModel):
     created_at: datetime = Field(title="datetime that the item was created")
     updated_at: datetime = Field(title="datetime that the item was updated")
 
+@app.get("/echo", tags=["Echo"])
+def get_echo(message: str, name: str):
+    return {"Message": f"{message} {name}!"}
 
-@app.get("/hello", tags=["Hello"])
-def get_hello():
-    return {"Message": "Hello FastAPI!"}
+@app.get("/health", tags=["System"])
+def get_health():
+    return {"status": "ok"}
+
+@app.get("/lists/{todo_list_id}", tags=["Todoリスト"], response_model=ResponseTodoList)
+def get_todo_list(todo_list_id: int, db: DbSession):
+    # DBから値を取得
+    db_item = db.query(ListModel).filter(ListModel.id == todo_list_id).first()
+    # そのまま返却
+    return db_item
