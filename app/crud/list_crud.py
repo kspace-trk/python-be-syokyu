@@ -6,12 +6,12 @@ from app.models.list_model import ListModel
 from app.schemas.list_schema import NewTodoList, UpdateTodoList
 
 
-def get_todo_list(db: Session, todo_list_id: int) -> ListModel | None:
+def get_todo_list(db: DbSession, todo_list_id: int) -> ListModel | None:
     """TODOリストを1件取得する."""
     return db.query(ListModel).filter(ListModel.id == todo_list_id).first()
 
 
-def create_todo_list(db: Session, new_todo_list: NewTodoList) -> ListModel:
+def create_todo_list(db: DbSession, new_todo_list: NewTodoList) -> ListModel:
     """TODOリストを1件登録する."""
     # ListModelクラスのインスタンスを生成する
     db_item = ListModel(title=new_todo_list.title, description=new_todo_list.description)
@@ -23,7 +23,7 @@ def create_todo_list(db: Session, new_todo_list: NewTodoList) -> ListModel:
     return db_item
 
 
-def update_todo_list(db: Session, todo_list_id: int, update_todo_list: UpdateTodoList) -> ListModel | None:
+def update_todo_list(db: DbSession, todo_list_id: int, update_todo_list: UpdateTodoList) -> ListModel | None:
     """TODOリストを1件更新する."""
     db_item = get_todo_list(db, todo_list_id)
     if db_item is None:
@@ -40,7 +40,7 @@ def update_todo_list(db: Session, todo_list_id: int, update_todo_list: UpdateTod
     return db_item
 
 
-def delete_todo_list(db: Session, todo_list_id: int) -> bool:
+def delete_todo_list(db: DbSession, todo_list_id: int) -> bool:
     """TODOリストを1件削除し、削除できたか否かを返す."""
     db_item = get_todo_list(db, todo_list_id)
     if db_item is None:

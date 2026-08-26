@@ -7,13 +7,13 @@ from app.models.item_model import ItemModel
 from app.schemas.item_schema import NewTodoItem, UpdateTodoItem
 
 
-def get_todo_item(db: Session, todo_list_id: int, todo_item_id: int) -> ItemModel | None:
+def get_todo_item(db: DbSession, todo_list_id: int, todo_item_id: int) -> ItemModel | None:
     """TODO項目を1件取得する."""
     # todo_list_idとtodo_item_idの両方で絞り込み、別リストの項目を取得しないようにする
     return db.query(ItemModel).filter(ItemModel.id == todo_item_id, ItemModel.todo_list_id == todo_list_id).first()
 
 
-def create_todo_item(db: Session, todo_list_id: int, new_todo_item: NewTodoItem) -> ItemModel:
+def create_todo_item(db: DbSession, todo_list_id: int, new_todo_item: NewTodoItem) -> ItemModel:
     """TODO項目を1件登録する."""
     # 親リストのidはパスパラメータから取得し、ボディの値と合わせてインスタンスを生成する
     db_item = ItemModel(
@@ -33,7 +33,7 @@ def create_todo_item(db: Session, todo_list_id: int, new_todo_item: NewTodoItem)
 
 
 def update_todo_item(
-    db: Session,
+    db: DbSession,
     todo_list_id: int,
     todo_item_id: int,
     update_todo_item: UpdateTodoItem,
@@ -63,7 +63,7 @@ def update_todo_item(
     return db_item
 
 
-def delete_todo_item(db: Session, todo_list_id: int, todo_item_id: int) -> bool:
+def delete_todo_item(db: DbSession, todo_list_id: int, todo_item_id: int) -> bool:
     """TODO項目を1件削除し、削除できたか否かを返す."""
     db_item = get_todo_item(db, todo_list_id, todo_item_id)
     if db_item is None:
