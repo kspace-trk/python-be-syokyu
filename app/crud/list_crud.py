@@ -1,6 +1,6 @@
 """TODOリストのDB操作."""
 
-from sqlalchemy.orm import Session
+from app.dependencies import DbSession
 
 from app.models.list_model import ListModel
 from app.schemas.list_schema import NewTodoList, UpdateTodoList

@@ -1,6 +1,6 @@
 """TODO項目のDB操作."""
 
-from sqlalchemy.orm import Session
+from app.dependencies import DbSession
 
 from app.const import TodoItemStatusCode
 from app.models.item_model import ItemModel
