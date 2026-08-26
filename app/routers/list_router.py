@@ -1,6 +1,6 @@
 """TODOリストのAPI."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
 from app.crud import list_crud
 from app.dependencies import DbSession
@@ -21,7 +21,11 @@ def get_todo_lists(db: DbSession):
 
 @router.get("/{todo_list_id}", response_model=ResponseTodoList)
 def get_todo_list(todo_list_id: int, db: DbSession):
-    return list_crud.get_todo_list(db, todo_list_id)
+    db_item = list_crud.get_todo_list(db, todo_list_id)
+    # 該当データが無ければ404を返す
+    if db_item is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo list not found")
+    return db_item
 
 
 @router.post("/", response_model=ResponseTodoList)
@@ -31,11 +35,17 @@ def post_todo_list(new_todo_list: NewTodoList, db: DbSession):
 
 @router.put("/{todo_list_id}", response_model=ResponseTodoList)
 def put_todo_list(todo_list_id: int, update_todo_list: UpdateTodoList, db: DbSession):
-    return list_crud.update_todo_list(db, todo_list_id, update_todo_list)
+    db_item = list_crud.update_todo_list(db, todo_list_id, update_todo_list)
+    # 更新対象が無ければ404を返す
+    if db_item is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo list not found")
+    return db_item
 
 
 @router.delete("/{todo_list_id}")
 def delete_todo_list(todo_list_id: int, db: DbSession):
-    list_crud.delete_todo_list(db, todo_list_id)
+    # crud側は削除できたか否かを返すので、その結果で404を判定する
+    if not list_crud.delete_todo_list(db, todo_list_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo list not found")
     # 削除系は空のJSONを返す（明示的にreturnしないとnullになる）
     return {}
