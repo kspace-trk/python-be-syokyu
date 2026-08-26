@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI
 
 from app.const import TodoItemStatusCode
+from app.routers import list_router
 from app.schemas.item_schema import NewTodoItem, ResponseTodoItem, UpdateTodoItem
 from app.schemas.list_schema import NewTodoList, ResponseTodoList, UpdateTodoList
 
@@ -27,6 +28,9 @@ if DEBUG:
         panels=["app.database.SQLAlchemyPanel"],
     )
 
+# 別モジュールに分割したルーターをアプリケーションへ合流させる
+app.include_router(list_router.router)
+
 
 @app.get("/echo", tags=["Echo"])
 def get_echo(message: str, name: str):
@@ -35,13 +39,6 @@ def get_echo(message: str, name: str):
 @app.get("/health", tags=["System"])
 def get_health():
     return {"status": "ok"}
-
-@app.get("/lists/{todo_list_id}", tags=["Todoリスト"], response_model=ResponseTodoList)
-def get_todo_list(todo_list_id: int, db: DbSession):
-    query = db.query(ListModel).filter(ListModel.id == todo_list_id)
-    print(query)
-    db_item = query.first()
-    return db_item
 
 
 @app.post("/lists", tags=["Todoリスト"], response_model=ResponseTodoList)
