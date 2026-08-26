@@ -13,6 +13,12 @@ router = APIRouter(
 )
 
 
+# 固定パスは、パスパラメータを含むパスより先に定義する
+@router.get("/", response_model=list[ResponseTodoList])
+def get_todo_lists(db: DbSession):
+    return list_crud.get_todo_lists(db)
+
+
 @router.get("/{todo_list_id}", response_model=ResponseTodoList)
 def get_todo_list(todo_list_id: int, db: DbSession):
     return list_crud.get_todo_list(db, todo_list_id)
