@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from app.dependencies import DbSession
 from app.models.list_model import ListModel
 from app.schemas.list_schema import NewTodoList, ResponseTodoList, UpdateTodoList
+from app.crud import list_crud
 
 # prefixでパスの共通部分を、tagsでSwagger UI上のグループをまとめて指定する
 router = APIRouter(
@@ -16,9 +17,7 @@ router = APIRouter(
 # prefixが付くため、デコレータには/lists以降だけを書く
 @router.get("/{todo_list_id}", response_model=ResponseTodoList)
 def get_todo_list(todo_list_id: int, db: DbSession):
-    query = db.query(ListModel).filter(ListModel.id == todo_list_id)
-    db_item = query.first()
-    return db_item
+    return list_crud.get_todo_list(db, todo_list_id)
 
 
 @router.post("/", response_model=ResponseTodoList)
