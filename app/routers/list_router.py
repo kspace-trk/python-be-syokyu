@@ -22,7 +22,6 @@ def get_todo_lists(db: DbSession):
 @router.get("/{todo_list_id}", response_model=ResponseTodoList)
 def get_todo_list(todo_list_id: int, db: DbSession):
     db_item = list_crud.get_todo_list(db, todo_list_id)
-    # 該当データが無ければ404を返す
     if db_item is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo list not found")
     return db_item
