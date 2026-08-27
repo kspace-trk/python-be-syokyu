@@ -7,6 +7,12 @@ from app.models.item_model import ItemModel
 from app.schemas.item_schema import NewTodoItem, UpdateTodoItem
 
 
+def get_todo_items(db: DbSession, todo_list_id: int) -> list[ItemModel]:
+    """指定したTODOリストに紐づくTODO項目を全件取得する."""
+    # 別リストの項目が混ざらないよう、todo_list_idで絞り込む
+    return db.query(ItemModel).filter(ItemModel.todo_list_id == todo_list_id).all()
+
+
 def get_todo_item(db: DbSession, todo_list_id: int, todo_item_id: int) -> ItemModel | None:
     """TODO項目を1件取得する."""
     # todo_list_idとtodo_item_idの両方で絞り込み、別リストの項目を取得しないようにする

@@ -6,6 +6,12 @@ from app.models.list_model import ListModel
 from app.schemas.list_schema import NewTodoList, UpdateTodoList
 
 
+def get_todo_lists(db: DbSession) -> list[ListModel]:
+    """TODOリストを全件取得する."""
+    # 複数件の取得は.all()。0件なら空のリストが返る
+    return db.query(ListModel).all()
+
+
 def get_todo_list(db: DbSession, todo_list_id: int) -> ListModel | None:
     """TODOリストを1件取得する."""
     return db.query(ListModel).filter(ListModel.id == todo_list_id).first()
